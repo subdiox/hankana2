@@ -35,7 +35,7 @@
 
 %new
 - (NSString *)hankana:(NSString *)string {
-  NSMutableString *mutableString = [string mutableCopy];
+	NSMutableString *mutableString = [string mutableCopy];
 	CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformHiraganaKatakana, NO);
 	CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformFullwidthHalfwidth, NO);
 	return [mutableString precomposedStringWithCanonicalMapping];
