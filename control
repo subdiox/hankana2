@@ -2,7 +2,7 @@ Package: com.subdiox.hankana2
 Name: Hankana 2
 Depends: mobilesubstrate
 Conflicts: jp.ipon3g.hankana
-Version: 1.0.1
+Version: 1.0.2
 Architecture: iphoneos-arm
 Description: Adds Hankaku-Kana candidate to your keyboard. Supports from iOS7 to iOS11. (Used jp.ipon3g.hankana package binary as reference. Thanks to ipon3g)
 Maintainer: subdiox

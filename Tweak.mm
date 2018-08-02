@@ -1,5 +1,35 @@
-#include "Tweak.h"
 #include <CoreFoundation/CFString.h>
+
+@interface UIKeyboardImpl
+
+- (NSString *)hankana:(NSString *)string;
+- (void)setCandidates:(id)arg1;
+- (id)inputStringFromPhraseBoundary;
+
+@end
+
+@interface TIKeyboardCandidate
+
+@end
+
+@interface TIKeyboardCandidateResultSet
+
+- (NSArray *)candidates;
+- (BOOL)hasCandidates;
++ (id)setWithCandidates:(id)arg1;
+- (TIKeyboardCandidate *)defaultCandidate;
+- (NSArray *)sortMethods;
+- (void)setGeneratedCandidateCount:(unsigned long long)arg1;
+- (void)setDefaultCandidate:(TIKeyboardCandidate *)arg1;
+- (void)setSortMethods:(NSArray *)arg1;
+
+@end
+
+@interface TIKeyboardCandidateSingle
+
++ (id)candidateWithCandidate:(id)arg1 forInput:(id)arg2;
+
+@end
 
 %hook UIKeyboardImpl
 
@@ -8,7 +38,7 @@
   NSMutableString *mutableString = [string mutableCopy];
 	CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformHiraganaKatakana, NO);
 	CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformFullwidthHalfwidth, NO);
-	return [NSString stringWithString:mutableString];
+	return [mutableString precomposedStringWithCanonicalMapping];
 }
 
 - (void)setCandidates:(TIKeyboardCandidateResultSet *)resultSet {
@@ -18,18 +48,10 @@
 			NSMutableArray *mutableCandidates = [NSMutableArray arrayWithArray:[resultSet candidates]];
 			int index = 2;
 			if ([mutableCandidates count] <= 2) {
-				index = 0;
+				index = [mutableCandidates count];
 			}
-			if (@available(iOS 11.0, *)) {
-				TIMecabraCandidate *hankakuCandidate = [[objc_getClass("TIMecabraCandidate") alloc] initWithCandidate:[self hankana:input] forInput:input mecabraCandidatePointerValue:nil withFlags:nil];
-				[mutableCandidates insertObject:hankakuCandidate atIndex:index];
-			} else if (@available(iOS 10.0, *)) {
-				TIMecabraCandidate *hankakuCandidate = [[objc_getClass("TIMecabraCandidate") alloc] initWithCandidate:[self hankana:input] forInput:input mecabraCandidatePointerValue:nil isExtension:NO isEmoji:NO isShortcut:NO isAutocorrection:NO];
-				[mutableCandidates insertObject:hankakuCandidate atIndex:index];
-			} else {
-				TIMecabraCandidate *hankakuCandidate = [[objc_getClass("TIMecabraCandidate") alloc] initWithCandidate:[self hankana:input] forInput:input mecabraCandidatePointerValue:nil isExtension:NO isEmoji:NO isShortcut:NO];
-				[mutableCandidates insertObject:hankakuCandidate atIndex:index];
-			}
+			TIKeyboardCandidateSingle *hankakuCandidate = [objc_getClass("TIKeyboardCandidateSingle") candidateWithCandidate:[self hankana:input] forInput:input];
+			[mutableCandidates insertObject:hankakuCandidate atIndex:index];
 			NSArray *sortMethods = [NSArray arrayWithArray:[resultSet sortMethods]];
 			TIKeyboardCandidate *defaultCandidate = [resultSet defaultCandidate];
 			resultSet = [objc_getClass("TIKeyboardCandidateResultSet") setWithCandidates:[NSArray arrayWithArray:mutableCandidates]];
