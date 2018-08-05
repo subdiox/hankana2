@@ -4,7 +4,7 @@ Depends: mobilesubstrate
 Conflicts: jp.ipon3g.hankana
 Version: 1.0.2
 Architecture: iphoneos-arm
-Description: Adds Hankaku-Kana candidate to your keyboard. Supports from iOS7 to iOS11. (Used jp.ipon3g.hankana package binary as reference. Thanks to ipon3g)
+Description: Adds Hankaku-kana candidate to your keyboard. Supports from iOS7 to iOS11. (Used jp.ipon3g.hankana package binary as reference. Thanks to ipon3g)
 Maintainer: subdiox
 Author: subdiox
 Section: Tweaks
