@@ -1,5 +1,6 @@
 # Hankana 2
-New version of Hankana, which adds hankaku-kana candidate to your keyboard.
+New version of Hankana, which adds hankaku-kana candidate to your keyboard.  
+Supports from iOS 7 to iOS 11 at least.
 
 # Installation from Cydia
 1. Add repo [http://subdiox.com/cydia](http://subdiox.com/cydia)
