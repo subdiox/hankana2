@@ -1,4 +1,4 @@
-# hankana2
+# Hankana 2
 New version of Hankana, which adds hankaku-kana candidate to your keyboard.
 
 # Installation from Cydia
