@@ -45,19 +45,22 @@
 	if ([resultSet hasCandidates]) {
 		NSString *input = [self inputStringFromPhraseBoundary];
 		if (input) {
-			NSMutableArray *mutableCandidates = [NSMutableArray arrayWithArray:[resultSet candidates]];
-			int index = 2;
-			if ([mutableCandidates count] <= 2) {
-				index = [mutableCandidates count];
+			NSString *hankanaInput = [self hankana:input];
+			if (![input isEqualToString:hankanaInput]) {
+				NSMutableArray *mutableCandidates = [NSMutableArray arrayWithArray:[resultSet candidates]];
+				int index = 2;
+				if ([mutableCandidates count] <= 2) {
+					index = [mutableCandidates count];
+				}
+				TIKeyboardCandidateSingle *hankakuCandidate = [objc_getClass("TIKeyboardCandidateSingle") candidateWithCandidate:hankanaInput forInput:input];
+				[mutableCandidates insertObject:hankakuCandidate atIndex:index];
+				NSArray *sortMethods = [NSArray arrayWithArray:[resultSet sortMethods]];
+				TIKeyboardCandidate *defaultCandidate = [resultSet defaultCandidate];
+				resultSet = [objc_getClass("TIKeyboardCandidateResultSet") setWithCandidates:[NSArray arrayWithArray:mutableCandidates]];
+				[resultSet setGeneratedCandidateCount:[[resultSet candidates] count]];
+				[resultSet setSortMethods:sortMethods];
+				[resultSet setDefaultCandidate:defaultCandidate];
 			}
-			TIKeyboardCandidateSingle *hankakuCandidate = [objc_getClass("TIKeyboardCandidateSingle") candidateWithCandidate:[self hankana:input] forInput:input];
-			[mutableCandidates insertObject:hankakuCandidate atIndex:index];
-			NSArray *sortMethods = [NSArray arrayWithArray:[resultSet sortMethods]];
-			TIKeyboardCandidate *defaultCandidate = [resultSet defaultCandidate];
-			resultSet = [objc_getClass("TIKeyboardCandidateResultSet") setWithCandidates:[NSArray arrayWithArray:mutableCandidates]];
-			[resultSet setGeneratedCandidateCount:[[resultSet candidates] count]];
-			[resultSet setSortMethods:sortMethods];
-			[resultSet setDefaultCandidate:defaultCandidate];
 		}
 	}
 	%orig;
